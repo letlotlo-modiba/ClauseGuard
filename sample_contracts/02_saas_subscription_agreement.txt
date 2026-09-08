@@ -1,0 +1,41 @@
+CLOUD SERVICES AND SUBSCRIPTION AGREEMENT
+
+This Cloud Services Agreement ("Agreement") governs the purchase and use of the CloudFlow platform between CloudFlow Analytics Inc. ("Provider") and Summit Enterprises ("Subscriber").
+
+1. SUBSCRIPTION SERVICE
+Provider grants Subscriber a non-exclusive, non-transferable subscription to access and use the CloudFlow Analytics web service during the Subscription Term in accordance with documentation.
+
+2. USER ACCOUNTS AND ACCESS
+Subscriber is responsible for maintaining the confidentiality of all login credentials and for all activities conducted under its account.
+
+3. FEES AND AUTOMATIC RENEWAL
+3.1 Subscription Fees. Subscriber shall pay the annual subscription fees set forth in the Order Form in advance. All payment obligations are non-cancelable and fees paid are non-refundable.
+3.2 Auto-Renewal. The Subscription Term shall automatically renew for successive one-year periods unless Subscriber provides written notice of non-renewal at least ninety (90) days prior to the expiration of the current term. Provider reserves the right to increase subscription fees upon renewal by up to twenty-five percent (25%) without prior notice.
+
+4. DATA SECURITY AND PRIVACY
+Provider implements industry standard administrative, physical, and technical safeguards designed to protect customer data.
+
+5. SERVICE LEVEL COMMITMENT
+Provider will use commercially reasonable efforts to achieve 99.5% service availability during each calendar month, excluding scheduled maintenance.
+
+6. UNILATERAL MODIFICATION OF TERMS
+Provider reserves the right to unilaterally modify these Terms of Service, service features, pricing tiers, and SLA metrics at any time in its sole discretion. Continued use of the platform after posting of modifications constitutes binding acceptance of modified terms.
+
+7. PROPRIETARY RIGHTS
+Provider retains all right, title, and interest in and to the platform, analytics engine, and related software. Subscriber owns all data uploaded by Subscriber.
+
+8. CONFIDENTIALITY
+Each party shall safeguard the other party's confidential business information using the same degree of care it uses for its own confidential materials.
+
+9. DISCLAIMER OF WARRANTIES
+EXCEPT AS EXPRESSLY SET FORTH HEREIN, THE SERVICES ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+10. LIMITATION OF LIABILITY
+10.1 Disclaimer of Provider Liability. IN NO EVENT SHALL PROVIDER BE LIABLE FOR ANY CONSEQUENTIAL, INDIRECT, SPECIAL, OR PUNITIVE DAMAGES, NOR SHALL PROVIDER'S TOTAL AGGREGATE LIABILITY EXCEED ZERO DOLLARS ($0.00).
+10.2 Subscriber Liability. Subscriber's liability for any breach of this Agreement, unauthorized access, or payment default shall be uncapped.
+
+11. TERMINATION
+Provider may suspend or terminate Subscriber's access immediately if Subscriber breaches any term of this Agreement or if Provider determines Subscriber's use violates acceptable use policies.
+
+12. DISPUTE RESOLUTION AND MANDATORY ARBITRATION
+Any dispute, controversy, or claim arising out of this Agreement shall be resolved through mandatory binding individual arbitration administered by JAMS in Dover, Delaware. Subscriber explicitly waives any right to a jury trial or to participate in any class action lawsuit.

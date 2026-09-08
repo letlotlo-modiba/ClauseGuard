@@ -1,0 +1,36 @@
+INDEPENDENT CONTRACTOR AGREEMENT
+
+This Independent Contractor Agreement ("Agreement") is entered into as of October 1, 2026, by and between BrightScale Media LLC ("Company") and Alex Morgan ("Contractor").
+
+1. SERVICES AND DELIVERABLES
+Contractor agrees to perform custom web application development, backend API integrations, and maintenance services as specified in Statements of Work issued under this Agreement. Contractor shall perform all services in a professional, workmanlike manner.
+
+2. COMPENSATION AND PAYMENT
+Company shall pay Contractor an hourly rate of $95.00 for authorized hours worked. Contractor shall submit bi-weekly invoices with itemized hours. Invoices shall be payable within thirty (30) days of receipt by Company.
+
+3. TERM OF AGREEMENT
+This Agreement shall commence on October 1, 2026, and shall continue for a period of twelve (12) months unless terminated earlier in accordance with Section 9.
+
+4. INTELLECTUAL PROPERTY AND WORK PRODUCT
+4.1 Custom Deliverables. Contractor agrees that all custom code, designs, and documentation developed specifically for Company shall be considered work made for hire.
+4.2 Pre-existing Works and Assignment. Contractor hereby assigns all right, title, and interest in and to all inventions, software, libraries, tools, and ideas conceived, reduced to practice, or developed by Contractor prior to or during the term of this Agreement, whether or not related to Company's business. Contractor waives all moral rights in perpetuity.
+
+5. CONFIDENTIALITY
+Each party agrees to hold the other party's Confidential Information in strict confidence and use it solely to perform obligations under this Agreement. Obligations shall survive for two (2) years following termination.
+
+6. WARRANTIES
+Contractor warrants that all deliverables provided hereunder shall be original work and shall not infringe upon any copyright, patent, trademark, or trade secret of any third party.
+
+7. INDEMNIFICATION
+7.1 Contractor Indemnification. Contractor shall defend, indemnify, and hold harmless Company, its officers, directors, and employees against any and all third-party claims, suits, liabilities, damages, losses, and legal expenses (including attorney fees) arising from any act, omission, breach, or alleged infringement by Contractor. Company shall have no reciprocal indemnification obligation.
+
+8. RESTRICTIVE COVENANTS
+8.1 Non-Solicitation. Contractor shall not solicit Company employees or customers for twelve (12) months post-termination.
+8.2 Non-Compete. For a period of eighteen (18) months following the termination of this Agreement, Contractor shall not directly or indirectly provide freelance software engineering, consulting, or web design services to any digital marketing agency, software enterprise, or media company worldwide.
+
+9. TERMINATION
+9.1 Termination for Convenience by Company. Company may terminate this Agreement at any time without cause and with immediate effect upon written notice.
+9.2 Termination by Contractor. Contractor may terminate only upon sixty (60) days advance written notice, during which Contractor must complete all outstanding milestones. If Contractor terminates, Contractor forfeits rights to any pending invoice payments.
+
+10. GENERAL PROVISIONS
+This Agreement constitutes the entire agreement between the parties. Any dispute arising under this Agreement shall be governed by the laws of the State of New York.

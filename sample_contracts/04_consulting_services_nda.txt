@@ -1,0 +1,25 @@
+NON-DISCLOSURE AND CONFIDENTIALITY AGREEMENT
+
+This Non-Disclosure Agreement ("Agreement") is made between Quantum Innovations Corp ("Disclosing Party") and Sarah Chen ("Receiving Party") to evaluate potential collaborative advisory work.
+
+1. PURPOSE
+The parties wish to explore business and technical synergies relating to high-frequency trading software architectures ("Purpose").
+
+2. CONFIDENTIAL INFORMATION
+Confidential Information includes all technical, commercial, financial, and strategic data disclosed by Disclosing Party. Any public information shall still be deemed confidential unless Receiving Party proves by clear and convincing documentary evidence that such information was published prior to disclosure.
+
+3. OBLIGATIONS OF RECEIVING PARTY
+Receiving Party agrees to protect Confidential Information with extreme care and not disclose it to any third party without prior written consent.
+
+4. DURATION AND POST-TERM RESTRICTIONS
+4.1 Perpetual Confidentiality. Receiving Party's obligations under this Agreement shall survive in perpetuity and shall not expire upon completion of discussions.
+4.2 Non-Solicitation of Personnel and Clients. For a period of two (2) years following receipt of any information, Receiving Party shall not directly or indirectly hire, solicit, or engage any employee, contractor, vendor, or customer of Disclosing Party.
+
+5. PERMITTED DISCLOSURES
+Receiving Party may disclose Confidential Information only if strictly required by court order, provided Receiving Party gives Disclosing Party ten (10) days advance notice to contest the order.
+
+6. RETURN OF MATERIALS
+Upon demand by Disclosing Party, Receiving Party shall return or destroy all materials and certify compliance within twenty-four (24) hours.
+
+7. REMEDIES AND LEGAL EXPENSES
+Receiving Party acknowledges that any breach would cause irreparable harm for which damages are inadequate. Receiving Party agrees that Disclosing Party is entitled to immediate injunctive relief without posting bond. In the event of any legal proceeding under this Agreement, Receiving Party shall pay all legal expenses and attorney fees incurred by Disclosing Party, regardless of the outcome of the dispute.

@@ -1,0 +1,158 @@
+{
+  "test_suite": "ClauseGuard Week 1 Benchmark Contracts",
+  "version": "1.0.0",
+  "contracts": [
+    {
+      "id": "01_freelance_developer_agreement",
+      "filename": "01_freelance_developer_agreement.txt",
+      "contract_type": "Independent Contractor Agreement",
+      "expected_flag_count": 4,
+      "flagged_clauses": [
+        {
+          "clause_id": "4",
+          "heading": "INTELLECTUAL PROPERTY AND WORK PRODUCT",
+          "risk_category": "IP_AND_RIGHTS",
+          "risk_level": "HIGH",
+          "rationale": "Assigns pre-existing IP and ideas developed prior to the agreement; perpetual moral rights waiver.",
+          "counterparty_question": "Can we carve out pre-existing intellectual property and restrict assignment to custom deliverables created under this scope?"
+        },
+        {
+          "clause_id": "7",
+          "heading": "INDEMNIFICATION",
+          "risk_category": "FINANCIAL_EXPOSURE",
+          "risk_level": "HIGH",
+          "rationale": "One-way uncapped indemnification of the company with no reciprocal protection for the contractor.",
+          "counterparty_question": "Can the indemnification be made mutual and capped to the total fees paid under this agreement?"
+        },
+        {
+          "clause_id": "8",
+          "heading": "RESTRICTIVE COVENANTS",
+          "risk_category": "IP_AND_RIGHTS",
+          "risk_level": "HIGH",
+          "rationale": "18-month worldwide non-compete preventing freelance work across marketing/software sectors.",
+          "counterparty_question": "Can this non-compete clause be struck or narrowed solely to direct solicitation of your current active clients?"
+        },
+        {
+          "clause_id": "9",
+          "heading": "TERMINATION",
+          "risk_category": "TERMINATION_AND_LOCKIN",
+          "risk_level": "MEDIUM",
+          "rationale": "Asymmetric termination rights (company can terminate immediately, contractor requires 60 days) plus forfeiture of pending invoices.",
+          "counterparty_question": "Can both parties have 30 days notice to terminate for convenience, with full payment for all work performed to date?"
+        }
+      ]
+    },
+    {
+      "id": "02_saas_subscription_agreement",
+      "filename": "02_saas_subscription_agreement.txt",
+      "contract_type": "SaaS Subscription Agreement",
+      "expected_flag_count": 4,
+      "flagged_clauses": [
+        {
+          "clause_id": "3",
+          "heading": "FEES AND AUTOMATIC RENEWAL",
+          "risk_category": "FINANCIAL_EXPOSURE",
+          "risk_level": "MEDIUM",
+          "rationale": "Auto-renewal with right to increase fees up to 25% without prior notice.",
+          "counterparty_question": "Can you provide at least 60 days written notice before renewal if prices increase, with right to opt out?"
+        },
+        {
+          "clause_id": "6",
+          "heading": "UNILATERAL MODIFICATION OF TERMS",
+          "risk_category": "UNILATERAL_MODIFICATION",
+          "risk_level": "HIGH",
+          "rationale": "Provider can unilaterally alter terms, SLA, and pricing at any time with continued use deemed acceptance.",
+          "counterparty_question": "Can terms and pricing changes require mutual written consent or allow 30 days penalty-free exit?"
+        },
+        {
+          "clause_id": "10",
+          "heading": "LIMITATION OF LIABILITY",
+          "risk_category": "FINANCIAL_EXPOSURE",
+          "risk_level": "HIGH",
+          "rationale": "Provider liability capped at $0 while subscriber liability remains completely uncapped.",
+          "counterparty_question": "Can we establish a mutual aggregate liability cap equal to 12 months of subscription fees paid?"
+        },
+        {
+          "clause_id": "12",
+          "heading": "DISPUTE RESOLUTION AND MANDATORY ARBITRATION",
+          "risk_category": "DISPUTE_RESOLUTION",
+          "risk_level": "MEDIUM",
+          "rationale": "Mandatory binding arbitration in Delaware with waiver of jury trial and class action.",
+          "counterparty_question": "Can disputes be subject to mutual executive escalation and standard court jurisdiction?"
+        }
+      ]
+    },
+    {
+      "id": "03_commercial_office_lease",
+      "filename": "03_commercial_office_lease.txt",
+      "contract_type": "Commercial Lease Agreement",
+      "expected_flag_count": 3,
+      "flagged_clauses": [
+        {
+          "clause_id": "5",
+          "heading": "OPERATING EXPENSES AND CAPITAL PASS-THROUGHS",
+          "risk_category": "FINANCIAL_EXPOSURE",
+          "risk_level": "HIGH",
+          "rationale": "Uncapped pass-through of structural replacements and capital modernization at landlord sole discretion.",
+          "counterparty_question": "Can capital expenditures be excluded from operating expenses or amortized over their useful life with an annual percentage cap?"
+        },
+        {
+          "clause_id": "8",
+          "heading": "EARLY TERMINATION PENALTY",
+          "risk_category": "TERMINATION_AND_LOCKIN",
+          "risk_level": "HIGH",
+          "rationale": "Accelerates all remaining lease payments as liquidated damages upon early departure.",
+          "counterparty_question": "Can the early termination fee be capped at 3 months rent, subject to reasonable advance notice?"
+        },
+        {
+          "clause_id": "11",
+          "heading": "LANDLORD ACCESS AND ENTRY",
+          "risk_category": "ASYMMETRIC_OBLIGATIONS",
+          "risk_level": "MEDIUM",
+          "rationale": "Landlord entry at any hour without notice or tenant accompaniment.",
+          "counterparty_question": "Can landlord entry be conditioned on 24 hours advance written notice, except in bona fide emergencies?"
+        }
+      ]
+    },
+    {
+      "id": "04_consulting_services_nda",
+      "filename": "04_consulting_services_nda.txt",
+      "contract_type": "Non-Disclosure Agreement",
+      "expected_flag_count": 3,
+      "flagged_clauses": [
+        {
+          "clause_id": "2",
+          "heading": "CONFIDENTIAL INFORMATION",
+          "risk_category": "ASYMMETRIC_OBLIGATIONS",
+          "risk_level": "MEDIUM",
+          "rationale": "Shifts burden of proof with clear and convincing standard to exclude publicly known information.",
+          "counterparty_question": "Can standard exclusions apply based on general commercial availability without heightened evidentiary burdens?"
+        },
+        {
+          "clause_id": "4",
+          "heading": "DURATION AND POST-TERM RESTRICTIONS",
+          "risk_category": "IP_AND_RIGHTS",
+          "risk_level": "HIGH",
+          "rationale": "Perpetual confidentiality obligation combined with a 2-year broad customer and personnel non-solicitation.",
+          "counterparty_question": "Can confidentiality be limited to 2-3 years, and the non-solicit restricted to key personnel directly engaged in discussions?"
+        },
+        {
+          "clause_id": "7",
+          "heading": "REMEDIES AND LEGAL EXPENSES",
+          "risk_category": "FINANCIAL_EXPOSURE",
+          "risk_level": "HIGH",
+          "rationale": "One-sided fee shifting forcing receiving party to pay legal fees regardless of outcome.",
+          "counterparty_question": "Can fee recovery follow the standard prevailing party rule, rather than unconditional payment by one side?"
+        }
+      ]
+    },
+    {
+      "id": "05_safe_standard_vendor_agreement",
+      "filename": "05_safe_standard_vendor_agreement.txt",
+      "contract_type": "Procurement Agreement",
+      "expected_flag_count": 0,
+      "flagged_clauses": [],
+      "note": "Negative control contract: balanced mutual terms, capped liability, mutual indemnity. Should produce 0 high-risk flags."
+    }
+  ]
+}
