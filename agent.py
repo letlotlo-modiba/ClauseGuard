@@ -17,10 +17,24 @@ from strands import Agent
 load_dotenv()
 
 try:
-    from .clause_tools import extract_clauses, flag_risky_clause
+    from .clause_tools import (
+        extract_clauses,
+        flag_risky_clause,
+        summarize_clause,
+        draft_questions,
+        retrieve_precedent,
+    )
+    from .models import TriageReport
     from .prompts import CLAUSEGUARD_SYSTEM_PROMPT
 except (ImportError, ValueError):
-    from clause_tools import extract_clauses, flag_risky_clause
+    from clause_tools import (
+        extract_clauses,
+        flag_risky_clause,
+        summarize_clause,
+        draft_questions,
+        retrieve_precedent,
+    )
+    from models import TriageReport
     from prompts import CLAUSEGUARD_SYSTEM_PROMPT
 
 
@@ -28,7 +42,7 @@ def is_aws_configured() -> bool:
     """Check if AWS credentials and region appear available."""
     has_keys = bool(os.environ.get("AWS_ACCESS_KEY_ID")) and bool(os.environ.get("AWS_SECRET_ACCESS_KEY"))
     has_profile = bool(os.environ.get("AWS_PROFILE"))
-    has_aws_file = Path("~/.aws/credentials").expanduser().exists()
+    has_aws_file = Path("~/.aws/credentials").expanduser().exists() or Path("~/.aws/config").expanduser().exists()
     return has_keys or has_profile or has_aws_file
 
 
@@ -38,7 +52,8 @@ def create_clauseguard_agent(
 ) -> Agent:
     """
     Constructs a Strands Agent configured with ClauseGuard's system prompt,
-    custom tools (extract_clauses, flag_risky_clause), and Amazon Bedrock model.
+    all custom tools (extract_clauses, flag_risky_clause, summarize_clause,
+    draft_questions, retrieve_precedent), and Amazon Bedrock model.
     """
     model_id = model_id or os.environ.get(
         "BEDROCK_MODEL_ID", "anthropic.claude-sonnet-4-5-20250929-v1:0"
@@ -47,7 +62,13 @@ def create_clauseguard_agent(
         "AWS_DEFAULT_REGION", os.environ.get("AWS_REGION", "us-east-1")
     )
 
-    tools = [extract_clauses, flag_risky_clause]
+    tools = [
+        extract_clauses,
+        flag_risky_clause,
+        summarize_clause,
+        draft_questions,
+        retrieve_precedent,
+    ]
 
     if is_aws_configured():
         from strands.models import BedrockModel
@@ -73,19 +94,22 @@ def create_clauseguard_agent(
 def triage_contract(
     document_path: str,
     contract_type: str = "General Contract",
-) -> dict[str, Any]:
+) -> TriageReport:
     """
     Core end-to-end triage loop:
     1. Parse and extract clauses using extract_clauses tool.
     2. Evaluate each clause using flag_risky_clause tool.
-    3. Generate structured triage report conforming to Draft v1 system prompt.
+    3. For flagged clauses: generate counterparty questions via draft_questions
+       and benchmark precedents via retrieve_precedent.
+    4. For safe clauses: generate plain-language summaries via summarize_clause.
+    5. Calculate risk score, executive summary, and overall notes.
+    6. Return rich TriageReport supporting both Markdown export and UI JSON.
     """
     path = Path(document_path)
     if not path.exists():
         raise FileNotFoundError(f"Contract file not found: {document_path}")
 
     # Step 1: Structural extraction via Strands tool
-    # Tool call returns dict or tool result
     extract_result = extract_clauses(str(path))
     if extract_result.get("status") != "success":
         error_msg = extract_result.get("message", "Failed to extract clauses")
@@ -94,9 +118,10 @@ def triage_contract(
     clauses = extract_result.get("clauses", [])
     filename = extract_result.get("filename", path.name)
 
-    # Step 2: Per-clause evaluation via Strands tool
+    # Step 2: Per-clause evaluation & enrichment via Strands tools
     flagged_clauses = []
     safe_clauses = []
+    drafted_questions = []
 
     for item in clauses:
         clause_id = item.get("clause_id", "")
@@ -114,27 +139,106 @@ def triage_contract(
         )
 
         if eval_result.get("flagged", False):
+            # Enrich with targeted questions and market compromise proposals
+            dq = draft_questions(
+                clause_text=clause_text,
+                clause_id=clause_id,
+                clause_heading=clause_heading,
+                risk_category=eval_result.get("risk_category", ""),
+                risk_level=eval_result.get("risk_level", "HIGH"),
+                what_it_says=eval_result.get("what_it_says", ""),
+                why_it_matters=eval_result.get("why_it_matters", ""),
+                contract_type=contract_type,
+            )
+
+            primary_q = dq.get("primary_question") or eval_result.get("question_to_ask", "")
+            suggested_comp = dq.get("suggested_compromise") or eval_result.get("suggested_compromise", "")
+            fallback_q = dq.get("fallback_question", "")
+            neg_goal = dq.get("negotiation_goal", "")
+
+            eval_result["question_to_ask"] = primary_q
+            eval_result["suggested_compromise"] = suggested_comp
+            eval_result["fallback_question"] = fallback_q
+            eval_result["negotiation_goal"] = neg_goal
+
+            # Retrieve benchmark precedent
+            prec = retrieve_precedent(
+                query=f"{clause_heading} {clause_text[:120]}",
+                risk_category=eval_result.get("risk_category", ""),
+                contract_type=contract_type,
+            )
+            if prec.get("found"):
+                eval_result["precedent_reference"] = prec.get("precedent_title", "")
+                eval_result["precedent_text"] = prec.get("standard_clause_text", "")
+                eval_result["market_standard_explanation"] = prec.get("market_standard_explanation", "")
+
             flagged_clauses.append(eval_result)
+
+            drafted_questions.append({
+                "clause_id": clause_id,
+                "clause_heading": clause_heading,
+                "risk_category": eval_result.get("risk_category", ""),
+                "primary_question": primary_q,
+                "fallback_question": fallback_q,
+                "suggested_compromise": suggested_comp,
+                "negotiation_goal": neg_goal,
+            })
         else:
+            # Summarize safe clause into plain language
+            sum_res = summarize_clause(
+                clause_text=clause_text,
+                clause_id=clause_id,
+                clause_heading=clause_heading,
+                context=contract_type,
+            )
             safe_clauses.append({
                 "clause_id": clause_id,
-                "heading": clause_heading,
-                "summary": eval_result.get("what_it_says", "Standard clause."),
+                "heading": clause_heading or f"Section {clause_id}",
+                "summary": sum_res.get("summary") or eval_result.get("what_it_says", "Standard clause."),
+                "key_obligations": sum_res.get("key_obligations", []),
+                "is_standard": sum_res.get("is_standard", True),
+                "practical_implication": sum_res.get("practical_implication", ""),
             })
 
-    # Step 3: Compile 4-part structured report
-    report = {
-        "filename": filename,
-        "contract_type": contract_type,
-        "total_clauses_reviewed": len(clauses),
-        "flagged_count": len(flagged_clauses),
-        "safe_count": len(safe_clauses),
-        "flagged_clauses": flagged_clauses,
-        "safe_clauses": safe_clauses,
-        "overall_notes": _generate_overall_notes(flagged_clauses, clauses),
-    }
+    # Step 3: Compute overall risk score
+    risk_score = "LOW"
+    if any(c.get("risk_level") == "HIGH" for c in flagged_clauses):
+        risk_score = "HIGH"
+    elif any(c.get("risk_level") == "MEDIUM" for c in flagged_clauses):
+        risk_score = "MEDIUM"
 
-    return report
+    # Step 4: Executive summary
+    if flagged_clauses:
+        flagged_categories = sorted(list(set(c.get("risk_category", "GENERAL") for c in flagged_clauses if c.get("risk_category"))))
+        categories_str = ", ".join(flagged_categories)
+        executive_summary = (
+            f"This document is a **{contract_type}** ({filename}) containing {len(clauses)} reviewed sections. "
+            f"ClauseGuard identified **{len(flagged_clauses)} clause(s)** requiring human judgment before signing, "
+            f"primarily in the areas of: {categories_str}. Recommended compromise positions and counterparty questions have been drafted below."
+        )
+    else:
+        executive_summary = (
+            f"This document is a **{contract_type}** ({filename}) containing {len(clauses)} reviewed sections. "
+            f"ClauseGuard evaluated the terms against the 7-category risk rubric and found **0 high-risk clauses**. "
+            "All reviewed provisions appear commercially balanced and standard for this contract type."
+        )
+
+    overall_notes = _generate_overall_notes(flagged_clauses, clauses)
+
+    # Step 5: Construct complete TriageReport
+    return TriageReport(
+        filename=filename,
+        contract_type=contract_type,
+        total_clauses_reviewed=len(clauses),
+        flagged_count=len(flagged_clauses),
+        safe_count=len(safe_clauses),
+        risk_score=risk_score,
+        executive_summary=executive_summary,
+        flagged_clauses=flagged_clauses,
+        safe_clauses=safe_clauses,
+        drafted_questions=drafted_questions,
+        overall_notes=overall_notes,
+    )
 
 
 def _generate_overall_notes(flagged_clauses: list[dict], all_clauses: list[dict]) -> list[str]:
@@ -158,8 +262,11 @@ def _generate_overall_notes(flagged_clauses: list[dict], all_clauses: list[dict]
     return notes
 
 
-def format_markdown_report(report: dict[str, Any]) -> str:
+def format_markdown_report(report: Any) -> str:
     """Format structured triage output into user-facing Markdown report."""
+    if hasattr(report, "to_markdown"):
+        return report.to_markdown()
+
     md = []
     md.append(f"# ClauseGuard Triage Report: {report['filename']}")
     md.append(f"**Contract Type:** {report['contract_type']} | **Reviewed Clauses:** {report['total_clauses_reviewed']} | **Flagged for Human Review:** {report['flagged_count']}\n")
@@ -189,7 +296,12 @@ def format_markdown_report(report: dict[str, Any]) -> str:
             md.append(f"### {idx}. Section {c_id}{heading_info} {badge}")
             md.append(f"- **What it says:** {clause.get('what_it_says')}")
             md.append(f"- **Why it matters:** {clause.get('why_it_matters')}")
-            md.append(f"- **Question to ask counterparty:** 💬 *\"{clause.get('question_to_ask')}\"*\n")
+            md.append(f"- **Question to ask counterparty:** 💬 *\"{clause.get('question_to_ask')}\"*")
+            if clause.get("suggested_compromise"):
+                md.append(f"- **Suggested compromise:** 💡 {clause.get('suggested_compromise')}")
+            if clause.get("precedent_reference"):
+                md.append(f"- **Standard precedent reference:** 📜 {clause.get('precedent_reference')}")
+            md.append("")
 
     # Part 3: Plain-Language Summary
     md.append("## 3. Plain-Language Summary (Everything Else)")
@@ -199,6 +311,9 @@ def format_markdown_report(report: dict[str, Any]) -> str:
         for item in report["safe_clauses"]:
             h = item.get("heading") or f"Section {item.get('clause_id')}"
             md.append(f"- **{h} (Section {item.get('clause_id')}):** {item.get('summary')}")
+            if item.get("key_obligations"):
+                obs = "; ".join(item["key_obligations"])
+                md.append(f"  *Key obligations:* {obs}")
         md.append("")
 
     # Part 4: Overall Notes
@@ -237,7 +352,10 @@ def main():
     try:
         report = triage_contract(args.contract_path, contract_type=args.contract_type)
         if args.json:
-            output_text = json.dumps(report, indent=2)
+            if hasattr(report, "to_json"):
+                output_text = report.to_json(indent=2)
+            else:
+                output_text = json.dumps(report, indent=2)
         else:
             output_text = format_markdown_report(report)
 
