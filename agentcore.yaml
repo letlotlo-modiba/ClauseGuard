@@ -1,0 +1,57 @@
+# AWS Bedrock AgentCore Deployment Manifest
+# ClauseGuard — AI Contract Triage Assistant
+version: "1.0"
+project:
+  name: "ClauseGuard"
+  version: "1.0.0"
+  description: "AI Contract Triage Assistant running on AWS Bedrock AgentCore Runtime"
+  track: "Professional Agents"
+  author: "Letlotlo Modiba"
+  license: "MIT"
+
+runtime:
+  environment: "python3.12"
+  framework: "Strands"
+  entrypoint: "agentcore_runtime.py:invoke"
+  server_entrypoint: "agentcore_runtime.py:run_server"
+  port: 8080
+  compute_type: "microVM" # Serverless session-isolated microVM execution
+  timeout_seconds: 300
+  memory_mb: 2048
+
+model:
+  provider: "Amazon Bedrock"
+  model_id: "anthropic.claude-sonnet-4-5-20250929-v1:0"
+  fallback_model_id: "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  region: "us-east-1"
+  temperature: 0.0
+  max_tokens: 1024
+
+tools:
+  - name: "extract_clauses"
+    description: "Extract numbered clauses and headings from .docx, .pdf, and .txt files"
+  - name: "flag_risky_clause"
+    description: "Evaluate per-clause risks against 7-category risk rubric"
+  - name: "summarize_clause"
+    description: "Plain-language translation and key obligations extraction for safe clauses"
+  - name: "draft_questions"
+    description: "Draft ready-to-send counterparty questions and market compromises"
+  - name: "retrieve_precedent"
+    description: "Query market-standard benchmarks via Bedrock Knowledge Base or curated precedent library"
+
+knowledge_base:
+  enabled: true
+  id_env_var: "BEDROCK_KB_ID"
+  local_fallback_directory: "precedents/"
+
+observability:
+  enabled: true
+  provider: "AWS CloudWatch / OpenTelemetry"
+  log_level: "INFO"
+  structured_logging: true
+  trace_correlation: true
+  metrics:
+    - "latency_ms"
+    - "reviewed_clauses"
+    - "flagged_clauses"
+    - "risk_score"
